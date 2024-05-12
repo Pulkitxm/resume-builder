@@ -4,11 +4,13 @@ import Home from "./pages/Home";
 import Template from "./pages/Template";
 import TemplateEdit from "./pages/TemplateEdit";
 import Auth from "./pages/Auth";
+import Alert from "./components/Alert";
 
 export default function App() {
   return (
     <div className="w-screen h-screen">
       <Navbar />
+      <Alert />
       <div className="h-full">
         <Routes>
           <Route path="/" element={<Home />} />

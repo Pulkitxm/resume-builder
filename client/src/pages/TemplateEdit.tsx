@@ -4,6 +4,8 @@ import Template1 from "../components/resume/Template1";
 import SpeedDial from "../components/SpeedDial";
 import { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
+import { useSetRecoilState } from "recoil";
+import { alertAtom } from "../state/alert";
 
 export default function TemplateEdit() {
   const [isEditable, setIsEditable] = useState(true);
@@ -12,9 +14,17 @@ export default function TemplateEdit() {
   const template = templates[id - 1];
   const [{ token }] = useCookies(["token"]);
   const navigate = useNavigate();
+  const setAlert = useSetRecoilState(alertAtom);
   useEffect(() => {
-    if (!token) navigate("/login");
-  }, [navigate, token]);
+    if (!token) {
+      navigate("/login");
+      setAlert({
+        show: true,
+        message: "You need to login to edit the template",
+        type: "warning",
+      });
+    }
+  }, [navigate, setAlert, token]);
   const handleDownload = () => {
     const input = divRef.current;
     setIsEditable(false);

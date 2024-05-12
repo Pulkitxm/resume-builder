@@ -4,12 +4,15 @@ import "./main.css";
 import { CookiesProvider } from "react-cookie";
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <CookiesProvider defaultSetOptions={{ path: "/" }}>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </CookiesProvider>
+    <RecoilRoot>
+      <CookiesProvider defaultSetOptions={{ path: "/" }}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </CookiesProvider>
+    </RecoilRoot>
   </BrowserRouter>
 );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Template1Props } from "../../../types/Templates/Template1";
 import EditableField from "../EditableField";
 
@@ -11,11 +11,9 @@ export default function Template1({
   isEditable?: boolean;
   divRef?: React.MutableRefObject<null>;
 }) {
-  const [data, setdata] = useState<Template1Props>({
-    ...template1Props,
-    imageURL: localStorage.getItem("imageURL") || template1Props.imageURL,
-  });
-  const sideOptions = Object.keys(data.contacts);
+  const [data, setdata] = useState<Template1Props>(template1Props);
+  const [editData, setEditData] = useState(data);
+  const sideOptions = Object.keys(editData.contacts);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @ts-expect-error___
@@ -25,11 +23,10 @@ export default function Template1({
 
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setdata((prevData) => ({
+        setEditData((prevData) => ({
           ...prevData,
           imageURL: reader.result as string,
         }));
-        localStorage.setItem("imageURL", reader.result as string);
       };
     }
   };
@@ -52,14 +49,14 @@ export default function Template1({
             className={`col-span-4 row-span-3 object-cover w-full h-full cursor-pointer`}
           >
             <img
-              src={data.imageURL}
+              src={editData.imageURL}
               className="col-span-4 row-span-3 object-cover w-full h-full"
             />
           </label>
         </>
       ) : (
         <img
-          src={data.imageURL}
+          src={editData.imageURL}
           className="col-span-4 row-span-3 object-cover w-full h-full"
         />
       )}
@@ -71,20 +68,20 @@ export default function Template1({
             <EditableField
               isEditable={isEditable}
               onchange={(val: string) =>
-                setdata((prev) => ({
+                setEditData((prev) => ({
                   ...prev,
                   education: { ...prev.education, name: val },
                 }))
               }
-              value={data.education.name}
+              value={editData.education.name}
               color="white"
               className="text-lg w-full h-7"
             />
             <EditableField
               isEditable={isEditable}
-              value={data.education.university}
+              value={editData.education.university}
               onchange={(val: string) =>
-                setdata((prev) => ({
+                setEditData((prev) => ({
                   ...prev,
                   education: { ...prev.education, university: val },
                 }))
@@ -101,7 +98,7 @@ export default function Template1({
           </div>
           {sideOptions.map((option, index) => {
             // @ts-expect-error___
-            const val = data.contacts[`${option}`];
+            const val = editData.contacts[`${option}`];
             return (
               <div className="my-2 mb-5 w-full text-sm" key={index}>
                 <div className="text-lg flex items-center">
@@ -116,7 +113,7 @@ export default function Template1({
                     isEditable={isEditable}
                     value={val}
                     onchange={(val: string) =>
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         contacts: {
                           ...prev.contacts,
@@ -137,9 +134,9 @@ export default function Template1({
         <div className="w-full h-[150px] bg-yellow-500 mt-20 mb-5 pl-16 flex flex-col justify-center">
           <EditableField
             isEditable={isEditable}
-            value={data.name}
+            value={editData.name}
             onchange={(val: string) =>
-              setdata((prev) => ({
+              setEditData((prev) => ({
                 ...prev,
                 name: val,
               }))
@@ -149,9 +146,9 @@ export default function Template1({
           />
           <EditableField
             isEditable={isEditable}
-            value={data.proffesionTitle}
+            value={editData.proffesionTitle}
             onchange={(val: string) =>
-              setdata((prev) => ({
+              setEditData((prev) => ({
                 ...prev,
                 proffesionTitle: val,
               }))
@@ -165,9 +162,9 @@ export default function Template1({
           <div className="h-0.5 w-full bg-black my-2"></div>
           <EditableField
             isEditable={isEditable}
-            value={data.aboutMe}
+            value={editData.aboutMe}
             onchange={(val: string) =>
-              setdata((prev) => ({
+              setEditData((prev) => ({
                 ...prev,
                 aboutMe: val,
               }))
@@ -179,14 +176,14 @@ export default function Template1({
         <div className="px-10 py-5">
           <p className="text-black text-2xl">Work Experience</p>
           <div className="h-0.5 w-full bg-black my-2"></div>
-          {data.workExperience.map((work, index) => {
+          {editData.workExperience.map((work, index) => {
             return (
               <div key={index} className="flex my-1">
                 <div className="flex w-[30%]">
                   <EditableField
                     isEditable={isEditable}
                     onchange={(val: string) =>
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         workExperience: prev.workExperience.map((work, ind) =>
                           ind === index ? { ...work, startDate: val } : work
@@ -204,7 +201,7 @@ export default function Template1({
                     isEditable={isEditable}
                     value={work.endDate}
                     onchange={(val: string) =>
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         workExperience: prev.workExperience.map((work, ind) =>
                           ind === index ? { ...work, endDate: val } : work
@@ -220,7 +217,7 @@ export default function Template1({
                     isEditable={isEditable}
                     value={work.position}
                     onchange={(val: string) => {
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         workExperience: prev.workExperience.map((work, ind) =>
                           ind === index ? { ...work, position: val } : work
@@ -234,7 +231,7 @@ export default function Template1({
                     isEditable={isEditable}
                     value={work.company}
                     onchange={(val: string) => {
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         workExperience: prev.workExperience.map((work, ind) =>
                           ind === index ? { ...work, company: val } : work
@@ -248,7 +245,7 @@ export default function Template1({
                     isEditable={isEditable}
                     value={work.description}
                     onchange={(val: string) => {
-                      setdata((prev) => ({
+                      setEditData((prev) => ({
                         ...prev,
                         workExperience: prev.workExperience.map((work, ind) =>
                           ind === index ? { ...work, description: val } : work
@@ -268,7 +265,7 @@ export default function Template1({
         <div className="px-10">
           <p className="text-black text-2xl">Skills</p>
           <div className="h-0.5 w-full bg-black my-2"></div>
-          {data.skills.map((skill, index) => {
+          {editData.skills.map((skill, index) => {
             return (
               <div
                 key={index}
@@ -291,7 +288,7 @@ export default function Template1({
                 <EditableField
                   isEditable={isEditable}
                   onchange={(val: string) =>
-                    setdata((prev) => ({
+                    setEditData((prev) => ({
                       ...prev,
                       skills: prev.skills.map((skill, ind) =>
                         ind === index ? val : skill

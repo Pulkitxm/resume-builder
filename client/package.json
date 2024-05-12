@@ -14,11 +14,13 @@
     "@material-tailwind/react": "^2.1.9",
     "axios": "^1.6.8",
     "html2pdf.js": "^0.9.3",
+    "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-cookie": "^7.1.4",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.0"
+    "react-router-dom": "^6.23.0",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
