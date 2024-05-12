@@ -28,7 +28,6 @@ export default function DefaultSpeedDial({
           <SpeedDialContent>
             {/* @ts-expect-error___ */}
             <SpeedDialAction onClick={handleSave}>
-              
               <svg
                 fill="none"
                 stroke="currentColor"

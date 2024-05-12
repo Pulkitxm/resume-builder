@@ -1,5 +1,3 @@
-import { Template1Props } from "../../../types/Templates/Template1";
-
 export default function EditableField({
   value,
   className,

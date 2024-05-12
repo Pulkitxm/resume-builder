@@ -5,7 +5,6 @@ import Template1 from "../components/resume/Template1";
 export default function Template() {
   const id: number = Number(useParams().id || "");
   const template = templates[id - 1];
-
   return (
     <div className="w-full h-full">
       <Link to={`/template/${id}/edit`} className="py-4 px-5 rounded-lg bg-yellow-700 fixed bottom-2 right-6">
