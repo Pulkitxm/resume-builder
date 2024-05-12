@@ -5,12 +5,12 @@ import Resume from "../models/Resume";
 export async function handlePostResume(req: Request, res: Response) {
   const body = req.body;
   const result = ValidFields.safeParse(body);
-  
-  const userID= req.body.userId;
 
-  if(!userID){
+  const userID = req.body.userId;
+
+  if (!userID) {
     return res.status(401).json({
-        message:"You are not authorized to access this route"
+      message: "You are not authorized to access this route",
     });
   }
 
@@ -21,8 +21,22 @@ export async function handlePostResume(req: Request, res: Response) {
   const newResume = new Resume({
     templateNo: 1,
     data: result.data,
-    userId: userID
+    userId: userID,
   });
   await newResume.save();
   res.send(newResume);
+}
+
+export async function handleGetResume(req: Request, res: Response) {
+  const userID = req.body.userId;
+
+  if (!userID) {
+    return res.status(401).json({
+      message: "You are not authorized to access this route",
+    });
+  }
+  const resumes = await Resume.find({
+    userId:userID
+  });
+  res.send(resumes);
 }

@@ -1,30 +1,36 @@
-export type Template1Props = {
-  name: string;
-  proffesionTitle: string;
-  aboutMe: string;
-  workExperience: WorkExperience[];
-  skills: string[];
-  contacts: Contact;
-  education: Education;
-  imageURL: string;
-};
+import { z } from "zod";
 
-type Education = {
-  name: string;
-  university: string;
-};
+const EducationSchema = z.object({
+  name: z.string(),
+  university: z.string(),
+});
 
-export type Contact = {
-  phone: string;
-  email: string;
-  address: string;
-  website: string;
-};
+const ContactTypeZod = z.object({
+  phone: z.string(),
+  email: z.string(),
+  address: z.string(),
+  website: z.string(),
+});
 
-type WorkExperience = {
-  startDate: string;
-  endDate: string;
-  position: string;
-  company: string;
-  description: string;
-};
+const WorkExperienceSchema = z.object({
+  startDate: z.string(),
+  endDate: z.string(),
+  position: z.string(),
+  company: z.string(),
+  description: z.string(),
+});
+
+export const Template1PropsZod = z.object({
+  name: z.string(),
+  proffesionTitle: z.string(),
+  aboutMe: z.string(),
+  workExperience: z.array(WorkExperienceSchema),
+  skills: z.array(z.string()),
+  contacts: ContactTypeZod,
+  education: EducationSchema,
+  imageURL: z.string().optional(),
+});
+
+
+export type Template1Props = z.infer<typeof Template1PropsZod>;
+export type Contact = z.infer<typeof ContactTypeZod>;

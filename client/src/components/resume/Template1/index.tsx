@@ -2,15 +2,18 @@ import { useRef, useState } from "react";
 import { Template1Props } from "../../../types/Templates/Template1";
 import EditableField from "../EditableField";
 import SpedDial from "../../SpeedDial";
+import { saveResumeData } from "../../../lib/Resume";
 
 export default function Template1({
   template1Props,
   isEditable,
   setIsEditable,
+  forHomePage,
 }: {
   template1Props: Template1Props;
   isEditable?: boolean;
   setIsEditable?: (val: boolean) => void;
+  forHomePage?: boolean;
 }) {
   const divRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -34,15 +37,29 @@ export default function Template1({
       };
     }
   };
-  const handleSave = () => {
-    setLoading(true);
-    setTimeout(() => {
-      localStorage.setItem("imageURL", data.imageURL);
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const obj = {
+        name: data.name,
+        proffesionTitle: data.proffesionTitle,
+        aboutMe: data.aboutMe,
+        education: data.education,
+        contacts: data.contacts,
+        workExperience: data.workExperience,
+        skills: data.skills,
+      };
+      const res = await saveResumeData(obj);
+      console.log(res);
+      data.imageURL && localStorage.setItem("imageURL", data.imageURL);
       setLoading(false);
-    }, 5000);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
   };
   const handleDownload = () => {
-    if(!setIsEditable) return;
+    if (!setIsEditable) return;
     setIsEditable(false);
     const dataElement = divRef.current;
     if (dataElement) {
@@ -60,15 +77,17 @@ export default function Template1({
   };
   return (
     <>
-      {loading && (
+      {!forHomePage && loading && (
         <div className="w-full h-full fixed top-0 left-0 bg-[#00000080] z-50 flex items-center justify-center">
           <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin absolute"></div>
         </div>
       )}
-      <SpedDial handleSave={handleSave} handleDownload={handleDownload} />
+      {!forHomePage && (
+        <SpedDial handleSave={handleSave} handleDownload={handleDownload} />
+      )}
       <div
         ref={divRef}
-        className="bg-white w-[800px] h-[1122px] mx-auto grid grid-cols-12 grid-rows-12 shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
+        className={`bg-white w-[800px] h-[1122px] mx-auto grid-cols-12 grid-rows-12 shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]`}
       >
         {isEditable ? (
           <>
